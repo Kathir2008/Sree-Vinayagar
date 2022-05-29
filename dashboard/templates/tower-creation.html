@@ -1,0 +1,234 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block tower_nav %} active open {% endblock %}
+{% block add_tower_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Tower Manage</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Tower Manage</li>
+            </ul>
+            
+        </div>
+        <div class="col-auto TowerView">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="createTowerBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-plus-medical"></i> Add Tower
+            </a>
+        </div>
+        <div class="col-auto TowerCreation hide">
+            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold BackBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-arrow-back"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row TowerCreation hide">
+        <div class="col-md-12">
+        
+          <div class="card mb-4">
+            <h5 class="card-header">Tower Creation</h5>
+            <!-- Account -->
+            <form id="createTowerForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <input type="hidden" id="towerId" name="towerId" value="0" />
+                <div class="card-body">
+
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+
+                        <img src="{% static 'img/avatars/notower.jpg' %}" class="d-block rounded" id="profile_image" width="100" height="100" style="margin:inherit;" data-img="{% static 'img/avatars/notower.jpg' %}">
+                    
+                        <div class="button-wrapper">
+                            
+                            <label for="tower_image" id="upload-btn" class="btn btn-secondary me-2 mb-4" tabindex="0">
+                                <!-- <span class="d-none d-sm-block">Upload new photo</span> -->
+                                <input type="file" accept="image/png, image/gif, image/jpeg, image/*" id="tower_image" name="tower_image" required>
+                            </label>
+                    
+                        <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                            <i class="bx bx-reset d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block Reset-Btn">Reset</span>
+                        </button>
+                    
+                        <p class="text-muted mb-0">Allowed JPG or PNG. Max size of 800K</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-0">
+                <div class="card-body">
+                    
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="tower_id" class="form-label">Tower Id</label>
+                                <input type="text" id="tower_id" name="tower_id" class="form-control" placeholder="e.g. 123" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="functional_location" class="form-label">Functional Location</label>
+                                <input type="text" id="functional_location" name="functional_location" class="form-control" placeholder="location" required>
+                            </div>
+
+                        
+                            <div class="mb-3 col-md-6">
+                                <label for="latitude" class="form-label">Latitude</label>
+                                <input type="number" step="any" id="latitude" name="latitude" class="form-control" placeholder="e.g. 82.5" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="longitude" class="form-label">longitude</label>
+                                <input type="number" step="any" id="longitude" name="longitude" class="form-control" placeholder="e.g. 82.5" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="machine_capacity" class="form-label">Machine Capacity</label>
+                                <input type="text" id="machine_capacity" name="machine_capacity" class="form-control" placeholder="Capacity" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="tower_type" class="form-label">Type of Tower</label>
+                                <select id="tower_type" name="tower_type" class="form-control" required>
+                                    <option value="Type 1">Type 1</option>
+                                    <option value="Type 2">Type 2</option>
+                                    <option value="Type 3">Type 3</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="tower_model" class="form-label">Model</label>
+                                <select id="tower_model" name="tower_model" class="form-control" required>
+                                    <option value="Model 1">Model 1</option>
+                                    <option value="Model 2">Model 2</option>
+                                    <option value="Model 3">Model 3</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="blade_type" class="form-label">Blade Type</label>
+                                <select id="blade_type" name="blade_type" class="form-control" required>
+                                    <option value="Blade 1">Blade 1</option>
+                                    <option value="Blade 2">Blade 2</option>
+                                    <option value="Blade 3">Blade 3</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="machine_height" class="form-label">Machine Height</label>
+                                <input type="text" id="machine_height" name="machine_height" class="form-control" placeholder="Model" required>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="panel" class="form-label">Panel</label>
+                                <select id="panel" name="panel" class="form-control" required>
+                                    <option value="Panel 1">Panel 1</option>
+                                    <option value="Panel 2">Panel 2</option>
+                                    <option value="Panel 3">Panel 3</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="transformer" class="form-label">Transformer</label>
+                                <input type="text" id="transformer" name="transformer" class="form-control" placeholder="Model" required>
+                            </div>
+
+                    
+                        </div>
+                        <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2 submitBtn">Create user</button>
+                        <button type="reset" class="btn btn-outline-secondary BackBtn">Cancel</button>
+                        </div>
+                
+                </div>
+            </form>
+            <!-- /Account -->
+          </div>
+        
+        </div>
+    </div>
+
+
+
+    <div class="row TowerView">
+        <div class="col-sm-12">
+            <div class="card card-table">
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="towerListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td>Id</td>
+                                    <td>Tower Id</td>
+                                    <td>Location</td>
+                                    <td>Capacity</td>
+                                    <td>Model</td>
+                                    <td>Transformer</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in towerdata %}
+
+                                <tr>
+                                    <td data-val={{obj.id}}>{{obj.id}}</td>
+                                    <td data-val={{obj.tower_id}}>
+                                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up me-2" title={{obj.tower_id}} data-bs-original-title="Lilian Fuller" style="width:45px;height:45px">
+                                                <img src="../media/{{obj.tower_image}}" alt="Avatar" class="rounded-circle">
+                                            </li>
+                                            <li class="fw-bold">{{obj.tower_id}}<br><small>{{obj.tower_type}}</small></li>
+                                        </ul>
+                                    </td>
+                                    <td class="fw-semibold" data-val='{{ obj.functional_location }}'>{{ obj.functional_location }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.machine_capacity }}'>{{ obj.machine_capacity }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.tower_model }}'>{{ obj.tower_model }}</td>                                    
+                                    <td class="fw-semibold" data-val='{{ obj.transformer }}'>{{ obj.transformer }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                            <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                    </td>
+                                   
+                                </tr>
+                            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   
+</div>
+
+{% endblock %}
+
+<!-- CSS -->
+
+{% block extra_css %}
+
+
+{% endblock %}
+
+<!-- CSS -->
+
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/manage_add_tower.js' %}" type="text/javascript"></script>
+
+{% endblock %}

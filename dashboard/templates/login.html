@@ -1,0 +1,303 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+
+<!-- beautify ignore:start -->
+<html lang="en" class="light-style">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Login || Vayulo</title>
+    
+    <meta name="description" content="Vayulo Dashboard , Dashboard" />
+    <meta name="keywords" content="dashboard">
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon/favicon.png' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'vendor/fonts/boxicons.css' %}" />
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'css/demo.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/lc_style.css' %}" />    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/css/pages/page-auth.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+
+    <!-- Helpers -->
+    <script src="{% static 'vendor/js/helpers.js' %}"></script>
+   <script src="{% static 'js/config.js' %}"></script>
+   
+    
+   
+</head>
+
+<body>
+
+  <!-- Content -->
+<div id="particles-js"></div>
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <a href="javascript:void(0)" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+
+                <img src ="{% static 'img/logo-img.png' %}" height="50px"/>
+
+             </span>
+            </a>
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-4 text-center text-bold">Welcome to Vayulo! 👋</h4>
+
+          <form id="formAuthentication" class="mb-3" action="{% url 'login' %}" method="POST">
+            {{ form }} {% csrf_token %}
+            <div class="mb-3">
+              <label for="username" class="form-label text-bold">Username</label>
+              <input type="email" class="form-control" id="username" name="username" placeholder="Enter your username" autofocus>
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <div class="d-flex justify-content-between">
+                <label class="form-label text-bold" for="password">Password</label>
+               
+              </div>
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                
+
+                <div class="d-flex justify-content-between">
+                 
+                  <label class="form-check-label" for="remember-me">
+                    <input class="form-check-input" type="checkbox" id="remember-me">Remember Me
+                  </label>
+                 
+                  <a href="#"><small>Forgot Password?</small></a>
+                 
+                </div>
+               
+               
+              </div>
+            </div>
+            <div class="mb-3">
+              <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+</div>
+
+<!-- / Content -->
+<style>
+  body, html {
+	height: 100%;
+	background-repeat: no-repeat;  
+	background:#f4f4ff;
+	position: relative;
+}
+#particles-js{
+  	width: 100%;
+  	height: 100%;
+  	background-size: cover;
+  	background-position: 50% 50%;
+  	position: fixed;
+  	top: 0px;
+  	z-index:1;
+}
+.card{
+  background-color:#ffffffb3;
+}
+</style>
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js' %} -->
+  <script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
+  <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+  
+  <script src="{% static 'vendor/js/menu.js' %}"></script>
+  <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <script>
+    $.getScript("{% static 'js/particles.min.js' %}", function(){
+        particlesJS('particles-js',
+          {
+            "particles": {
+              "number": {
+                "value": 100,
+                "density": {
+                  "enable": true,
+                  "value_area": 500
+                }
+              },
+              "color": {
+                "value": "#696cff"
+              },
+              "shape": {
+                "type": "circle",
+                "stroke": {
+                  "width": 0,
+                  "color": "#ff0000"
+                },
+                "polygon": {
+                  "nb_sides": 5
+                },
+                "image": {
+                  "width": 100,
+                  "height": 100
+                }
+              },
+              "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": {
+                  "enable": false,
+                  "speed": 1,
+                  "opacity_min": 0.1,
+                  "sync": false
+                }
+              },
+              "size": {
+                "value": 5,
+                "random": true,
+                "anim": {
+                  "enable": false,
+                  "speed": 40,
+                  "size_min": 0.1,
+                  "sync": false
+                }
+              },
+              "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#fff",
+                "opacity": 0.4,
+                "width": 1
+              },
+              "move": {
+                "enable": true,
+                "speed": 6,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "attract": {
+                  "enable": false,
+                  "rotateX": 600,
+                  "rotateY": 1200
+                }
+              }
+            },
+            "interactivity": {
+              "detect_on": "canvas",
+              "events": {
+                "onhover": {
+                  "enable": true,
+                  "mode": "repulse"
+                },
+                "onclick": {
+                  "enable": true,
+                  "mode": "push"
+                },
+                "resize": true
+              },
+              "modes": {
+                "grab": {
+                  "distance": 400,
+                  "line_linked": {
+                    "opacity": 1
+                  }
+                },
+                "bubble": {
+                  "distance": 400,
+                  "size": 40,
+                  "duration": 2,
+                  "opacity": 8,
+                  "speed": 3
+                },
+                "repulse": {
+                  "distance": 100
+                },
+                "push": {
+                  "particles_nb": 4
+                },
+                "remove": {
+                  "particles_nb": 2
+                }
+              }
+            },
+            "retina_detect": true,
+            "config_demo": {
+              "hide_card": false,
+              "background_color": "#b61924",
+              "background_image": "",
+              "background_position": "50% 50%",
+              "background_repeat": "no-repeat",
+              "background_size": "cover"
+            }
+          }
+        );
+
+    });
+
+
+
+
+
+
+  </script>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+  <!-- Page JS -->
+  
+  
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+{% extends 'base.html' %} {% load static %} {% block tower_nav %} active {% endblock %} {% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <input type="hidden" id="TowerData" data-val="{{ towerdata }}" />
+
+    <!-- <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Vayulo /</span> Towers
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+            Launch modal
+        </button>
+    </h4> -->
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Towers</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Tower</li>
+            </ul>
+        </div>
+        <div class="col-auto">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="createTowerBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="fas fa-plus"></i> New Tower
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="towerListDT">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal_header_content">
+                    <h3 class="mb-4 text-center">Tower Creation</h3>
+                    <div class="app-brand justify-content-center">
+                        <a href="javascript:void(0)" class="app-brand-link gap-2 mb-3">
+                            <img src="{% static 'img/logo-img.png' %}" style="width:175px;height:36px" />
+                        </a>
+                    </div>
+                </div>
+
+                <form id="towerCreationForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                    <input type="hidden" id="towerId" name="towerId" value="0" />
+
+                    <div class="modal-body pt-0">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="tower_number" class="form-label">Tower Number</label>
+                                <input type="text" id="tower_number" name="tower_number" class="form-control" placeholder="e.g. 123" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="functional_location" class="form-label">Functional Location</label>
+                                <input type="text" id="functional_location" name="functional_location" class="form-control" placeholder="location" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="latitude" class="form-label">Latitude</label>
+                                <input type="number" step="any" id="latitude" name="latitude" class="form-control" placeholder="e.g. 82.5" required>
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label for="latitude" class="form-label">Latitude</label>
+                                <input type="number" step="any" id="latitude" name="latitude" class="form-control" placeholder="e.g. 82.5" required>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <label for="machine_capacity" class="form-label">Machine Capacity</label>
+                                <input type="text" id="machine_capacity" name="machine_capacity" class="form-control" placeholder="Capacity" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="tower_type" class="form-label">Type of Tower</label>
+                                <input type="text" id="tower_type" name="tower_type" class="form-control" placeholder="Tower Type" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="model" class="form-label">Model</label>
+                                <input type="text" id="model" name="model" class="form-control" placeholder="Model" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="blade_type" class="form-label">Blade Type</label>
+                                <input type="text" id="blade_type" name="blade_type" class="form-control" placeholder="Blade Type" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="machine_height" class="form-label">Machine Height</label>
+                                <input type="text" id="machine_height" name="machine_height" class="form-control" placeholder="Model" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="panel" class="form-label">Panel</label>
+                                <input type="text" id="panel" name="panel" class="form-control" placeholder="Panel" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="transformer" class="form-label">Transformer</label>
+                                <input type="text" id="transformer" name="transformer" class="form-control" placeholder="Model" required>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary bold" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary submitBtn bold">Create</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} {% block extra_css %} {% endblock %} {% block extra_js %}
+
+
+<script>
+    $(document).ready(function() {
+        var TowerData = $("#TowerData").data("val");
+        console.log(TowerData)
+
+        towerDataTable(TowerData)
+
+        $("#createTowerBtn").click(function() {
+            $("#towerCreationForm").trigger('reset');
+            $("#towerId").val(0);
+            $("#tower_number").focus();
+            $(".submitBtn").text("Create");
+        })
+
+        function towerDataTable(towerListObj) {
+            (function rec(d) {
+                $.each(d, function(k, v) {
+                    if (typeof v === 'object') return rec(v)
+                    if (isNaN(v) && typeof v === 'number') d[k] = '---';
+                })
+            })(towerListObj);
+
+            if ($.fn.dataTable.isDataTable("#towerListDT")) {
+                $("#towerListDT").DataTable().destroy();
+            }
+
+            var towerListDatatable = $("#towerListDT").DataTable({
+                "data": towerListObj,
+                responsive: true,
+                paging: true,
+                searching: true,
+                "autoWidth": true,
+                "jQueryUI": true,
+                "scrollY": false,
+                "scrollCollapse": true,
+                "order": [0, "desc"],
+                "pageLength": 10,
+                "bLengthChange": false,
+                "scrollX": false,
+                columns: [{
+                    "title": "Id",
+                    "data": "id"
+                }, {
+                    "title": "Tower No",
+                    "data": "tower_number",
+                }, {
+                    "title": "Type",
+                    "data": "tower_type",
+                }, {
+                    "title": "Model",
+                    "data": "tower_model",
+                }, {
+                    "title": "Blade",
+                    "data": "blade_type",
+                }, {
+                    "title": "Panel",
+                    "data": "panel",
+                }, {
+                    "title": "Capacity",
+                    "data": "machine_capacity",
+                }, {
+                    "title": "Height",
+                    "data": "machine_height",
+                }, {
+                    "title": "Location",
+                    "data": "functional_location",
+                }, ],
+                columnDefs: [{
+                    "targets": 0,
+                    "visible": false,
+                }, {
+                    "targets": 8,
+                    "render": function(data, type, row) {
+                        var loactionHtml = '<div style="display:grid">\
+                                                    <span>' + data + '</span>\
+                                                    <span style="font-size:12px">(Lat - <strong>' + row.latitude + '</strong>, Lon - <strong>' + row.longitude + '</strong>) </span>\
+                                                <div>'
+
+                        return loactionHtml
+                    }
+                }]
+            })
+        };
+
+    })
+</script>
+
+{% endblock %}

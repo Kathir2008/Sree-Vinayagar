@@ -1,0 +1,244 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.hide{
+    display:none;
+}
+
+
+.modal_header_content {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 10px;
+}
+
+
+.text-bold {
+    font-weight: 800;
+}
+
+.swal2-icon {
+    font-size: 16px !important;
+}
+
+.swal2-container {
+    z-index: 99999 !important;
+}
+
+
+img {
+    margin: 0 auto;
+    display:block;
+}
+/*PRELOADING------------ */
+#overlayer {
+    width:100%;
+    height:100%;  
+    position:absolute;
+    z-index:99;
+    background:#e2e2e2;
+}
+.loader {
+    display: inline-block;
+    position: absolute;
+    z-index:999;
+    top: 30%;
+    left: 42%;
+    animation: loader 2s infinite ease;
+}
+                
+.loading{
+    background-color: #0e76a8;  
+    width:5rem;
+    height:5px;
+    animation: animation 1.8s infinite;
+}
+
+@keyframes animation {
+    0% {
+        transform: translateX(0rem);
+    }
+    50% {
+        transform: translateX(10rem);
+    }
+    100% {
+        transform: translateX(0rem);
+    }
+}
+
+
+
+.bold {
+    font-weight: bold;
+}
+
+.statusText
+{
+    color: white;
+    text-align: center;
+    width: fit-content;
+    padding: 0 4px;
+    border-radius: 5px;
+}
+
+.footer{
+    border-radius: .375rem;
+}
+.upload{
+    width: 100px;
+    position: relative;
+    margin: auto;
+}
+
+.upload img{
+    /* border-radius: 50%;
+    border: 6px solid #eaeaea; */
+}
+
+.upload .round
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #00B4FF;
+    width: 32px;
+    height: 32px;
+    line-height: 33px;
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.upload .round input[type = "file"]{
+    position: absolute;
+    transform: scale(2);
+    opacity: 0;
+}
+
+input[type=file]::-webkit-file-upload-button{
+        cursor: pointer;
+}
+
+form ul li {
+    margin:10px 10px;
+
+}
+
+#pswd_info {
+    position: absolute;
+    width: 247px;
+    padding: 0px;
+    background: #fefefe;
+    font-size: .875em;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #ccc;
+    border: 1px solid #ddd;
+    display: none;
+}
+
+#pswd_info h4 {
+    margin:0 0 10px 0;
+    padding:0;
+    font-weight:normal;
+    font-size: 17px;
+}
+
+#pswd_info::before {
+    content: "\25B2";
+    position:absolute;
+    top:-12px;
+    left:45%;
+    font-size:14px;
+    line-height:14px;
+    color:#b4bdc6;
+    text-shadow:none;
+    display:block;
+}
+
+.invalid {
+    background:url(../img/invalid.png) no-repeat 0 50%;
+    padding-left:22px;
+    line-height:24px;
+    color:#ec3f41;
+}
+.valid {
+    background:url(../img/valid.png) no-repeat 0 50%;
+    padding-left:22px;
+    line-height:24px;
+    color:#3a7d34;
+}
+
+
+.select2
+{
+    width : 100% !important;
+}
+
+
+.select2-container .select2-selection--single {
+    border: 1px solid #ddd;
+    height: 40px
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px;
+    right: 7px
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #ddd transparent transparent !important;
+    border-style: solid;
+    border-width: 6px 6px 0;
+    height: 0;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -2px;
+    position: absolute;
+    top: 50%;
+    width: 0
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+    border-color: transparent transparent #ddd;
+    border-width: 0 6px 6px
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-right: 30px;
+    padding-left: 15px
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #333;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 38px
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #7638ff
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ddd;
+    min-height: 40px
+}
+
+
+#selected_tower_list_view li
+{
+    list-style: none;
+}
+
+
+@media only screen and (max-width: 425px)
+{
+    .resetBtnSection
+    {
+        text-align: center;
+    }
+}

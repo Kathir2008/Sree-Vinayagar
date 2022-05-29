@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block Income_nav %} active open {% endblock %}
+{% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Income<a/h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Income</li>
+            </ul>
+            
+        </div>
+        <div class="col-auto IncomeView ">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="addIncomeBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-plus-medical"></i> Add a new Income
+            </a>
+        </div>
+        <div class="col-auto IncomeCreation hide">
+            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold BackBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-arrow-back"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row IncomeCreation hide">
+        <div class="col-md-12">
+        
+          <div class="card mb-4">
+            <h5 class="card-header">Add New Income</h5>
+            <!-- Account -->
+            <form id="`" action="{% url 'add_income' %}" method="POST">{% csrf_token %}
+                <input type="hidden" id="incomeId" name="incomeId" value="0" />
+                <hr class="my-0">
+                <div class="card-body">
+                    
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" id="date" name="date" class="form-control"   autofocus required>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="desc" class="form-label">Description</label>
+                            <input type="text" id="desc" name="desc" class="form-control" placeholder="Description" autofocus required>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="text" id="amount" name="amount" class="form-control" placeholder="amount" autofocus required>
+                        </div>
+                
+                    </div>
+                    <div class="row">
+                        <div class="mb-12 col-md-12">
+                            <label for="date" class="form-label">Note</label>
+                            <textarea name="notes" id="notes" rows="3" class="form-control"></textarea>
+                        </div>
+                
+                    </div>
+                        <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2 submitBtn">Add</button>
+                        </div>
+                
+                </div>
+            </form>
+            <!-- /Account -->
+          </div>
+        
+        </div>
+    </div>
+
+
+
+    <div class="row IncomeView">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="IncomeListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td>Id</td>
+                                    <td>Date</td>
+                                    <td>Description</td>
+                                    <td>Amount</td>
+                                    <td>Note</td>
+                                    <td>Edit</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in incomedata %}
+
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td class="fw-semibold" data-val='{{ obj.date }}'>{{ obj.date }}</td>
+                                        <td class="fw-semibold" data-val='{{ obj.description }}'>{{ obj.description }}</td> 
+                                        <td class="fw-semibold" data-val='{{ obj.amount }}'>{{ obj.amount }}</td>         
+                                        <td class="fw-semibold" data-val='{{ obj.notes }}'>{{ obj.notes }}</td>                                    
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                                <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                        </td>
+                                    </tr>
+                            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/manage_add_region.js' %}" type="text/javascript"></script>
+
+{% endblock %}
+
+            <!-- /Account -->

@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% load static %} {% block assigned_tower_view_nav %} active {% endblock %} {% block main_content %}
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Assigned Towers</h3>
+        </div>
+        
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <select class="form-control" id="user_list_select2">
+                <option value=""></option>
+                <option value="Tower 1">Tower 1</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row"  id="towerdetails">
+        <div class="col-sm-12 ">
+            <div class="card ">
+                <div class="card-body">
+                    <h3 id="t1" style="display: none;">Tower Details 1</h3>
+                    <h3 id="t2" style="display: none;">Tower Details 2</h3>
+                    <h3 id="t3" style="display: none;">Tower Details 3</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row" id="turbineicon"  >
+        <div class="col-sm-12 ">
+            <div class="card ">
+                <div class="card-body">     
+                    <img src="{% static 'img/turbine.jpg' %}" style="width:375px;" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    
+
+
+   
+</div>
+
+{% endblock %}
+
+<!-- CSS -->
+
+{% block extra_css %}
+
+
+{% endblock %}
+
+<!-- CSS -->
+
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+
+<script>
+    $(document).ready(function() {
+        $("#user_list_select2").select2({
+            placeholder : "Select User",
+            allowClear: false,
+        })
+
+        $('#user_list_select2').on("change" , function(){
+            var thisUser = $(this).val();
+            console.log(thisUser)
+
+            if(thisUser == "")
+            {
+                $('#turbineicon').show()
+            }
+            else
+            {
+                $('#turbineicon').hide()
+            }
+        })
+
+    })
+</script>
+
+{% endblock %}

@@ -1,0 +1,313 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block region_nav %} active open {% endblock %}
+{% block assign_region_nav %} active {% endblock %} 
+{% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Assign Pooja</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Assign Pooja</li>
+            </ul>
+            
+        </div>
+        <div class="col-auto RegionView">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="assignregionBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-plus-medical"></i> Assign Pooja
+            </a>
+        </div>
+        <div class="col-auto RegionAssign hide">
+            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold BackBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-arrow-back"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row RegionAssign hide">
+        <div class="col-md-12">
+        
+          <div class="card mb-4">
+            <h5 class="card-header">Assigning Pooja</h5>
+            <!-- Account -->
+            <form id="assignRegionForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <input type="hidden" id="regionAssignId" name="regionAssignId" value="0" />
+                <hr class="my-0">
+                <div class="card-body">
+                    
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="region" class="form-label">Region Pooja</label>
+                                <select id="region" name="region" class="form-control" required>
+                                    {% for obj in poojadata %}
+                                        <option value = {{obj.id}}>{{obj.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="user" class="form-label">Assign To</label>
+                                <select name="user" id="user" class="form-control district_list_select2" required multiple>
+                                    {% for obj in userdata %}
+                                        <option value = {{obj.id}}>{{obj.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                    
+                        </div>
+                        <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2 submitBtn">Create</button>
+                        <button type="reset" class="btn btn-outline-secondary BackBtn">Cancel</button>
+                        </div>
+                
+                </div>
+            </form>
+            <!-- /Account -->
+          </div>
+        
+        </div>
+    </div>
+
+
+    <div class="row RegionView">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="regionListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td>Id</td>
+                                    <td>User Name</td>
+                                    <td>Pooja Name</td>
+                                    <td>Action</td>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in AssignPoojaData %}
+
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td class="fw-semibold" data-val='{{ obj.username }}'>{{ obj.username }}</td>
+                                        <td class="fw-semibold" data-val='{{ obj.poojaname }}'>{{ obj.poojaname }}</td> 
+                                                                        
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                                <i class='menu-icon tf-icons bx bx-edit'></i> Remove</button>
+                                        </td>
+                                    </tr>
+                            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+
+
+   
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    $(document).ready(function() {
+
+
+$("#region").select2({
+    placeholder : "Select Region",
+    allowClear : true
+})
+
+$("#user").select2({
+    placeholder : "Select User",
+    allowClear : true
+})
+
+
+$(".BackBtn").click(function() {
+    $(".RegionAssign").hide();
+    $(".RegionView").show();  
+});
+
+$("#assignregionBtn").click(function() {
+
+    $(".RegionAssign").show();
+    $(".RegionView").hide();  
+                        
+    $("#assignRegionForm").trigger('reset')
+    $("#regionAssignId").val("0")
+
+})
+
+$("#assignRegionForm").submit(function(e)
+{
+    e.preventDefault();
+
+    var AssignedRegionData = []
+
+    var selectedUserList = $("#user").val();
+    console.log(selectedUserList)
+
+    for(var i =0; i<selectedUserList.length;i++)
+    {
+        var obj = {
+            "userid" : selectedUserList[i],
+            "poojaid" : $("#region").val()
+        }
+
+        AssignedRegionData.push(obj)
+    }
+
+    // var csrftoken = '{{ csrf_token }}'
+
+    var csrftoken  = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+
+    $.ajax({
+        type: "POST",
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+        },
+        url: ".",
+        data: JSON.stringify({
+            'AssignedRegionData': AssignedRegionData
+        }),
+        success: function (msg) {
+            iziToast.success({
+                timeout: 1500,
+                balloon: true,
+                overlay: true,
+                displayMode: 'once',
+                id: 'success',
+                title: 'Success',
+                zindex: 99999999,
+                message: '<b>Tower Mapped Successfully</b>',
+                onClosing: function () {
+                    location.reload();
+                }
+            });
+        }, error: function (exception) {
+            iziToast.error({
+                timeout: 1500,
+                balloon: true,
+                overlay: true,
+                displayMode: 'once',
+                id: 'error',
+                title: 'Error',
+                zindex: 99999999,
+                message: '<b>Error</b>',
+            });
+        }
+    });
+
+});
+
+
+$("#regionListDT").on("click", ".EditBtn", function() {
+
+
+    var thisData = $(this).data("val");
+
+    eval('var thisregionData = '+thisData);
+    console.log(thisregionData)
+
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Remove User to this Pooja",
+        type: "warning",
+        
+        confirmButtonText: "Yes, archive it!",
+        cancelButtonText: "No, cancel please!",
+        closeOnConfirm: false,
+        closeOnCancel: false,
+        showCloseButton: false,
+        showConfirmButton: true,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        cancelButtonColor: 'grey',
+        
+        confirmButtonColor: '#22CC62',
+        focusConfirm: false,
+    }).then(function (result) {
+            if (result.value == true) {
+                console.log("log")
+            var csrftoken  = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+                url: "{% url 'remove_pooja' %}",
+                data: JSON.stringify({
+                    'AssignedRegionData': thisregionData
+                }),
+                success: function (msg) {
+                    iziToast.success({
+                        timeout: 1500,
+                        overlay: true,
+                        displayMode: 'once',
+                        id: 'success',
+                        title: 'Success',
+                        zindex: 99999999,
+                        message: '<b>Assign Remove Successfully</b>',
+                        onClosing: function () {
+                            location.reload();
+                        }
+                    });
+                   }, error: function (exception) {
+                    iziToast.error({
+                        timeout: 1500,
+                        balloon: true,
+                        overlay: true,
+                        displayMode: 'once',
+                        id: 'error',
+                        title: 'Error',
+                        zindex: 99999999,
+                        message: '<b>Error</b>',
+                    });
+                }
+            });
+
+
+            }
+            else if (result.dismiss == 'cancel') {
+                return false
+            }
+        })
+    
+
+ /*    $("#regionId").val(thisregionData.id);
+    $("#name").val(thisregionData.name);
+    $("#amount").val(thisregionData.amount);
+    $("#desc").val(thisregionData.desc);
+
+    $(".submitBtn").text("Save Changes"); */
+})
+
+
+
+
+
+})
+
+</script>
+
+{% endblock %}

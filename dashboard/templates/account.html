@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block Add_account_nav %} active open {% endblock %}
+{% block main_content %}
+
+
+
+
+<!-- <input type="hidden" id="AccountsData" data-val="{{ AccountsData }}"> -->
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Account Data<a/h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Account Data</li>
+            </ul>
+            
+        </div>
+        <div class="col-auto ">
+            <a href="{% url 'expense' %}" class="btn btn-primary me-1 bold" id="goExpense" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-box"></i> Expense 
+            </a>
+        </div>
+        <div class="col-auto ">
+            <a href="{% url 'add_income' %}" class="btn btn-primary me-1 bold" id="goIncome" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-plus-medical"></i> Income
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <div class="row AccountData">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="AccountsListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td>Income</td>
+                                    <td>Expense</td>
+                                    <td>Balance</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in expensedata %}
+                                    <tr>
+                                        <td class="fw-semibold" data-val='{{ obj.amount }}'>{{ obj.amount }}</td> 
+                                    
+                                        <td class="fw-semibold" data-val='{{ obj.amount }}'>{{ obj.amount }}</td> 
+                                    </tr>
+                                    {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/manage_add_region.js' %}" type="text/javascript"></script>
+
+<script>
+    // $(document).ready(function() {?
+    //     var AccountsData = $("#AccountsData").data("val");
+    //     console.log(AccountsData.amount)
+
+
+    //     // AccountListDTTable(AccountsData);
+
+    //     // function AccountListDTTable(DataObj) {
+    //     //     (function rec(d) {
+    //     //         $.each(d, function(k, v) {
+    //     //             if (typeof v === 'object') return rec(v)
+    //     //             if (isNaN(v) && typeof v === 'number') d[k] = '---';
+    //     //         })
+    //     //     })(DataObj);
+
+    //     //     if ($.fn.dataTable.isDataTable("#AccountsListDT")) {
+    //     //         $("#AccountsListDT").DataTable().destroy();
+    //     //     }
+    //     //     console.log(DataObj)
+    //         var CustomerListDatatable = $("#AccountsListDT").DataTable({
+    //             "data": AccountsData,
+    //             responsive: true,
+    //             columns: [  {
+    //                 "title": "Income",
+    //                 "data": "amount"
+    //             }, {
+    //                 "title": "Expense",
+    //                 "data": "amount"
+    //             }, ]
+    //         })
+
+
+    // })
+</script>
+
+{% endblock %}
+
+            <!-- /Account -->

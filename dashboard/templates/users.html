@@ -1,0 +1,192 @@
+{% extends 'base.html' %} {% load static %} {% block users_nav %} active {% endblock %} {% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Users</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Users</li>
+            </ul>
+            
+        </div>
+        <div class="col-auto UserView">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="adduserBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-plus-medical"></i> Add User
+            </a>
+        </div>
+        <div class="col-auto UserCreation hide">
+            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold BackBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="bx bx-arrow-back"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row UserCreation hide">
+        <div class="col-md-12">
+        
+          <div class="card mb-4">
+            <h5 class="card-header">User Creation</h5>
+            <!-- Account -->
+            <form id="addUsersForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <input type="hidden" id="userId" name="userId" value="0" />
+              
+                <div class="card-body">
+                    
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                    <label for="firstname" class="form-label">Name</label>
+                                    <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Firstname" autofocus>
+                            </div>
+                           
+
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="example@abc.com">
+                            </div>
+                        
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="phone">Phone Number</label>
+                                <div class="input-group input-group-merge">
+                                <span class="input-group-text">(+91)</span>
+                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="9123456780">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" id="address" name="address" class="form-control" placeholder="address" autofocus>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="district" class="form-label">District</label>
+                                <input type="text" id="district" name="district" class="form-control" placeholder="district" autofocus>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="maritalstatus" class="form-label">Marital Status</label>
+                                <select id="maritalstatus" name="maritalstatus" class="form-control" required>
+                                    <option value="unmarried">UnMarried</option>
+                                    <option value="married">Married</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="dob" class="form-label">Date Of Birth</label>
+                                <input type="date" id="dob" name="dob" class="form-control" placeholder="dob" autofocus>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="marriagedate" class="form-label">Marriage Date</label>
+                                <input type="date" id="marriagedate" name="marriagedate" class="form-control" placeholder="marriagedate" autofocus>
+                            </div>
+                          
+
+                            <div class="mb-3 col-md-6 statusRow">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" name="status" class="form-control">
+                                    <option value="0">Active</option>
+                                    <option value="1">Inactive</option>
+                                </select>
+                            </div>
+                    
+                        </div>
+                        <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2 submitBtn">Create user</button>
+                        <button type="reset" class="btn btn-outline-secondary BackBtn">Cancel</button>
+                        </div>
+                
+                </div>
+            </form>
+            <!-- /Account -->
+          </div>
+        
+        </div>
+    </div>
+
+
+
+    <div class="row UserView">
+        <div class="col-sm-12">
+            <div class="card card-table">
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="userListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td class="hide" >Id</td>
+                                    <td>Name</td>
+                                    <td>Phone</td>
+                                    <td>Email</td>
+                                    <td>Address</td>
+                                    <td>Status</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in usersdata %}
+
+                                <tr>
+                                    <td class="hide" data-val={{obj.id}}>{{ obj.id }}</td>
+                                    <td data-val={{obj.name}}>
+                                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                           
+                                            <li class="fw-bold">{{obj.name}}</li>
+                                        </ul>
+                                    </td>
+                                    <td class="fw-semibold" data-val='{{ obj.phone }}'>{{ obj.phone }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.email }}'>{{ obj.email }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.address }}'>{{ obj.address }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.status }}'>
+                                        {% if obj.status == 0 %}
+                                            <span class="badge bg-label-success me-1">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-label-danger me-1">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                            <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                    </td>
+                                </tr>
+                            
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   
+</div>
+
+{% endblock %}
+
+<!-- CSS -->
+
+{% block extra_css %}
+
+
+{% endblock %}
+
+<!-- CSS -->
+
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/manage_add_user.js' %}" type="text/javascript"></script>
+
+{% endblock %}

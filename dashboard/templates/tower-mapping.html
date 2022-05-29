@@ -1,0 +1,260 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block tower_nav %} active open {% endblock %}
+{% block tower_mapping_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Tower Mapping</h3>
+        </div>
+        
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3 mb-2">
+            <select class="form-control" id="user_list_select2">
+                <option value=""></option>
+                {% for obj in userdata %}
+                    <option value="{{obj.id}}" data-id={{obj.id}} data-first_name={{obj.first_name}}>{{ obj.first_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3 mb-2">
+            <div class="resetBtnSection">
+                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4 user_list_select2_resetBtn">                
+                    <span class="Reset-Btn"><i class="bx bx-reset"></i> Reset</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row" id="turbineicon"  >
+        <div class="col-sm-12 ">
+            <div class="card ">
+                <div class="card-body">     
+                    <img src="{% static 'img/turbine.jpg' %}" style="width:375px;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="mt-3" id="tower_list_select2_section" style="display:none">
+        <div class="card">
+            <div class="card-body">
+                <form id="towerMappingForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                    <input type="hidden" name="assignedUserId" id="assignedUserId" value="0">
+                    <input type="hidden" name="mappingId" id="mappingId"  value="0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Assign Towers</h3>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <select class="form-control" name="tower_list" id="tower_list_select2" multiple required>
+                                {% for obj in towerdata %}
+                                    <option value="{{obj.id}}" data-id={{obj.id}} data-tower_id={{obj.tower_id}}>{{ obj.tower_id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+    
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary me-1 bold"  id="assignTowerBtn">Assign</button>
+                        </div>
+                    </div>
+                </form>
+
+                
+                <div class="row mt-4" id="selected_tower_list_section" style="display:none;">
+                    <div class="col-md-12">
+                        <h3 class="page-title">Selected Towers</h3>
+                        <ul id="selected_tower_list_view">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+
+   
+</div>
+
+{% endblock %}
+
+<!-- CSS -->
+
+{% block extra_css %}
+
+
+{% endblock %}
+
+<!-- CSS -->
+
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+
+<script>
+    $(document).ready(function() {
+
+        $("#user_list_select2").select2({
+            placeholder : "Select User",
+            templateResult : formatUserSelect2,
+            allowClear: true,
+        })
+
+        function formatUserSelect2(data)
+        {
+            console.log(data)
+        }
+
+
+        $('#user_list_select2').on("change" , function(){
+            var thisUser = $(this).val();
+            console.log(thisUser)
+
+            $("#tower_list_select2").val("").trigger(("change"))
+
+            if(thisUser == "" || thisUser == undefined || thisUser == null )
+            {
+                $('#turbineicon').show()
+                $("#tower_list_select2_section").hide()
+            }
+            else
+            {
+                $('#turbineicon').hide()
+                $("#tower_list_select2_section").show()
+
+                $("#assignedUserId").val($(this).val())
+            }
+        })
+
+        $(".user_list_select2_resetBtn").click(function()
+        {
+            $("#user_list_select2").val("").trigger("change");
+            $("#assignedUserId").val("0")
+        })
+
+        $("#tower_list_select2").select2({
+            placeholder: "Select Tower",
+            allowClear : false,
+        })
+
+
+        $("#tower_list_select2").on("change" , function()
+        {
+
+
+            var selectedTowerList = []
+            $("#selected_tower_list_view").empty()
+            var selectedTowerLength = $(this).val().length;
+
+            if(selectedTowerLength != 0)
+            {
+                $("#selected_tower_list_section").show()
+
+                $('#tower_list_select2 option:selected').each(function(){
+                    var $value =$(this).attr('data-tower_id');
+                    selectedTowerList.push($value)
+                });
+
+                var towerListHtml = ""
+
+                for(var i=0; i<selectedTowerList.length; i++ )
+                {
+                    towerListHtml = '<li><i class="bx bx-check"></i>'+selectedTowerList[i]+'</li>'
+
+                    $("#selected_tower_list_view").append(towerListHtml)
+                }
+            }
+
+            else if(selectedTowerLength == 0)
+            {
+                $("#selected_tower_list_section").hide()
+            }
+
+        })
+
+        $("#towerMappingForm").submit(function(e)
+        {
+            e.preventDefault();
+
+            var TowerMappingData = []
+
+            var selectedTowers =  $("#tower_list_select2").val();
+
+            for(var i =0; i<selectedTowers.length;i++)
+            {
+                var obj = {
+                    "user_id" : $("#user_list_select2").val(),
+                    "tower_id" : selectedTowers[i]
+                }
+
+                TowerMappingData.push(obj)
+            }
+
+            var csrftoken = '{{ csrf_token }}'
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+                url: ".",
+                data: JSON.stringify({
+                    'TowerMappingData': TowerMappingData
+                }),
+                success: function (msg) {
+                    iziToast.success({
+                        timeout: 1500,
+                        balloon: true,
+                        overlay: true,
+                        displayMode: 'once',
+                        id: 'success',
+                        title: 'Success',
+                        zindex: 99999999,
+                        message: '<b>Tower Mapped Successfully</b>',
+                        onClosing: function () {
+                            location.reload();
+                        }
+                    });
+                }, error: function (exception) {
+                    iziToast.error({
+                        timeout: 1500,
+                        balloon: true,
+                        overlay: true,
+                        displayMode: 'once',
+                        id: 'error',
+                        title: 'Error',
+                        zindex: 99999999,
+                        message: '<b>Error</b>',
+                    });
+                }
+            });
+
+        })
+
+
+
+      
+
+    })
+</script>
+
+{% endblock %}

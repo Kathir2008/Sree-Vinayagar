@@ -1,0 +1,448 @@
+{% extends 'base.html' %} {% load static %} {% block users_nav %} active {% endblock %} {% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Users</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Users</li>
+            </ul>
+
+        </div>
+        <div class="col-auto">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="adduserBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="fas fa-plus"></i> Add User
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="userListDT">
+                            <thead>
+                                <tr class="fw-bold">
+                                    <td class="hide">Id</td>
+                                    <td>Name</td>
+                                    <td>Role</td>
+                                    <td>Managed By</td>
+                                    <td>Status</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for obj in userdata %}
+
+                                <tr>
+                                    <td class="hide" data-val={{obj.id}}>{{ obj.id }}</td>
+                                    <td data-val={{obj.first_name}}>
+                                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up me-2" title={{obj.first_name}} data-bs-original-title="Lilian Fuller" style="width:45px;height:45px">
+                                                <img src="../media/{{obj.user_image}}" alt="Avatar" class="rounded-circle">
+                                            </li>
+                                            <li class="fw-bold">{{obj.first_name}}<br><small>{{obj.email}}</small></li>
+                                        </ul>
+                                    </td>
+                                    <td class="fw-semibold" data-val='{{ obj.role }}'>{{ obj.role }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.managed_by }}'>{{ obj.managed_by }}</td>
+                                    <td class="fw-semibold" data-val='{{ obj.status }}'>
+                                        {% if obj.status == 0 %}
+                                        <span class="badge bg-label-success me-1">Active</span> {% else %}
+                                        <span class="badge bg-label-danger me-1">Inactive</span> {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href='javascript:void(0)' style='color:var(--bs-table-hover-color)' title='edit' data-bs-toggle='modal' data-bs-target='#modalCenter' data-val="{{ obj|safe }}" class='editBtn'>
+                                            <i class='menu-icon tf-icons bx bx-edit'></i></a>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal_header_content">
+                    <h3 class="mb-4 text-center">User Registration</h3>
+                    <div class="app-brand justify-content-center">
+                        <a href="javascript:void(0)" class="app-brand-link gap-2 mb-3">
+                            <img src="{% static 'img/logo-img.png' %}" style="width:125px;height:36px" />
+                        </a>
+                    </div>
+                </div>
+
+
+                <form id="addUsersForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                    <input type="hidden" id="userId" name="userId" value="0" />
+
+                    <div class="modal-body pt-0">
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="upload">
+                                    <img src="{% static 'img/avatars/noprofile.png' %}" id="profile_image" width=100 height=100 alt="">
+                                    <div class="round">
+                                        <input type="file" accept="image/png, image/gif, image/jpeg, image/*" id="user_image" name="user_image">
+                                        <i class='tf-icons bx bx-camera' style="color:#fff"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstname" class="form-label">FirstName</label>
+                                <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Firstname">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastname" class="form-label">LastName</label>
+                                <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Lastname">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="example@abc.com">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Mobile</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="9123456780">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="............" required>
+                                <div id="pswd_info">
+                                    <h4>Password must meet the following requirements:</h4>
+                                    <ul id="password_info_list" style="margin: 0;padding:0;list-style-type:none;">
+                                        <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+                                        <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+                                        <li id="number" class="invalid">At least <strong>one number</strong></li>
+                                        <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+                                        <li id="specialchar" class="invalid">Be at least <strong>one special characters</strong></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="............" required>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select id="role" name="role" class="form-control" required>
+                                    {% for role in roledata %}
+                                        <option data-val="{{role}}" value="{{ role.name }}">{{role.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3 managed_by_row" id="managed_by_row">
+                                <label for="managed_by" class="form-label">Managed By</label>
+                                <select id="managed_by" name="managed_by" class="form-control">
+                                    {% for obj in userdata %}
+                                    <option data-val="{{ obj.first_name }}" value="{{ obj.first_name }}">{{obj.first_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3 statusRow">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" name="status" class="form-control">
+                                    <option value="0">Active</option>
+                                    <option value="1">Inactive</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary bold" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary submitBtn bold">Register</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+<!-- CSS -->
+
+{% block extra_css %} {% endblock %}
+
+<!-- CSS -->
+
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+
+<script>
+    $(document).ready(function() {
+
+        $('#password').keyup(function() {
+            // keyup code here
+            var password = $(this).val();
+            console.log(password)
+            if (password.length < 8) {
+                $('#length').removeClass('valid').addClass('invalid');
+            } else {
+                $('#length').removeClass('invalid').addClass('valid');
+            }
+
+            if (password.match(/[a-z]/)) {
+                $('#letter').removeClass('invalid').addClass('valid');
+            } else {
+                $('#letter').removeClass('valid').addClass('invalid');
+            }
+
+            //validate capital letter
+            if (password.match(/[A-Z]/)) {
+                $('#capital').removeClass('invalid').addClass('valid');
+            } else {
+                $('#capital').removeClass('valid').addClass('invalid');
+            }
+
+            //validate number
+            if (password.match(/\d/)) {
+                $('#number').removeClass('invalid').addClass('valid');
+            } else {
+                $('#number').removeClass('valid').addClass('invalid');
+            }
+
+            //validate special Character
+            if (password.match(/[!@#$%^&*(_)><?":}{\.\,\-\=\;\']/)) {
+                $('#specialchar').removeClass('invalid').addClass('valid');
+            } else {
+                $('#specialchar').removeClass('valid').addClass('invalid');
+            }
+
+
+        }).focus(function() {
+            $('#pswd_info').show();
+        }).blur(function() {
+            $('#pswd_info').hide();
+        });
+
+
+
+
+        // userTable()
+
+
+        user_image.onchange = evt => {
+            const [file] = user_image.files;
+            if (file) {
+                profile_image.src = URL.createObjectURL(file)
+            }
+        }
+
+
+        $("#adduserBtn").click(function() {
+            $("#addUsersForm").trigger('reset')
+            $("#userId").val(0);
+            $(".statusRow").hide();
+            $("#status").val('0');
+            $(".submitBtn").text("Register");
+            $("#profile_image").attr("src", "../static/img/avatars/noprofile.png")
+            $("#user_image").attr('required', 'required');
+            $("#managed_by_row").show();
+
+            $('#length').removeClass('valid').addClass('invalid');
+            $('#letter').removeClass('valid').addClass('invalid');
+            $('#capital').removeClass('valid').addClass('invalid');
+            $('#number').removeClass('valid').addClass('invalid');
+            $('#specialchar').removeClass('valid').addClass('invalid');
+
+        })
+
+
+        userTable();
+
+        function userTable() {
+            (function rec(d) {
+                $.each(d, function(k, v) {
+                    if (typeof v === 'object') return rec(v)
+                    if (isNaN(v) && typeof v === 'number') d[k] = '---';
+                })
+            })();
+
+            if ($.fn.dataTable.isDataTable("#userListDT")) {
+                $("#userListDT").DataTable().destroy();
+            }
+
+            var userListDatatable = $("#userListDT").DataTable({
+                responsive: true,
+                paging: true,
+                searching: false,
+                "scrollY": false,
+                "scrollCollapse": true,
+                "pageLength": 10,
+                "bLengthChange": false,
+                "scrollX": false,
+                columnDefs: []
+
+            })
+        };
+
+
+        $("#userListDT").on("click", ".editBtn", function() {
+            $(".statusRow").show()
+
+            var thisUserData = $(this).data("json");
+            console.log(thisUserData);
+
+            $("#userId").val(thisUserData.id);
+            $("#username").val(thisUserData.username);
+            $("#email").val(thisUserData.email);
+            $("#phone").val(thisUserData.phone);
+            $("#password").val(thisUserData.password_text);
+            $("#role").val(thisUserData.role);
+            $("#status").val(thisUserData.status);
+
+            $("#profile_image").attr("src", "../media/" + thisUserData.user_image)
+
+            $("#user_image").val("")
+
+            $("#user_image").removeAttr('required');
+
+            $("#managed_by").val(thisUserData.managed_by)
+
+            if (thisUserData.role == "employee") {
+                $("#managed_by_row").show()
+            } else {
+                $("#managed_by_row").hide()
+            }
+
+            $(".submitBtn").text("Save Changes");
+        })
+
+        var passwordFormat = /^((?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{:"<>?}\.\,\-\=\;\']).{8,})+$/
+
+        $("#addUsersForm").submit(function(e) {
+            // e.preventDefault()
+
+            console.log($("#status").val())
+
+            var userPassword = $("#password").val();
+            var confirmPassword = $("#confirm_password").val();
+
+            if (userPassword.length > 0) {
+                if (passwordFormat.test(userPassword)) {
+                    if (userPassword == confirmPassword) {
+                        var userStatus = $("#status").val();
+
+                        if (userStatus == 1) {
+                            e.preventDefault()
+                            Swal.fire({
+                                icon: "warning",
+                                html: '<div class="row" style="margin-top:15px">\
+                                            <div class="col-md-12">\
+                                                    <div class= "titleSection text-center">\
+                                                        <h4>Are You Sure to Inactive</h4>\
+                                                    </div>\
+                                            </div >\
+                                        </div >\
+                                        <div class="row" style="margin-top:15px">\
+                                            <div class="col-md-12">\
+                                                <div class="confirmSection text-center">\
+                                                    <p style="line-height:1.5;font-size:20px">Customer <span style="font-weight:bold">' + $("#username").val() + '</span> Cannot be Assigned anymore</p>\
+                                                </div>\
+                                            </div>\
+                                        </div>',
+                                showCloseButton: false,
+                                showConfirmButton: true,
+                                showCancelButton: true,
+                                cancelButtonText: "Cancel",
+                                cancelButtonColor: 'grey',
+                                confirmButtonText: "Confirm",
+                                confirmButtonColor: '#22CC62',
+                                focusConfirm: false,
+
+                            }).then(function(result) {
+                                if (result.value == true) {
+                                    $("#addUsersForm").unbind('submit').submit()
+                                } else if (result.dismiss == 'cancel') {
+                                    e.preventDefault()
+                                }
+                            })
+                        } else {
+                            return true
+                        }
+                    } else {
+                        iziToast.error({
+                            timeout: 2500,
+                            balloon: true,
+                            overlay: true,
+                            displayMode: 'once',
+                            id: 'error',
+                            title: 'Error',
+                            zindex: 99999999,
+                            message: '<b>Confirm Password is Invalid</b>',
+                        });
+                        return false
+                    }
+                } else {
+                    $("#password").focus()
+
+                    return false
+                }
+
+            } else {
+                return true
+            }
+
+
+
+        })
+
+
+
+
+    })
+</script>
+
+{% endblock %}

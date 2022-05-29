@@ -1,0 +1,320 @@
+{% extends 'base.html' %} {% load static %} {% block role_nav %} active {% endblock %} {% block main_content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <input type="hidden" id="RoleData" data-val="{{ roledata }}" />
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Role</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Role</li>
+            </ul>
+        </div>
+        <div class="col-auto">
+            <a href="javascript:void(0)" class="btn btn-primary me-1 bold" id="addroleBtn" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <i class="fas fa-plus"></i> Add Role
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-center table-hover" id="roleListDT">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal_header_content">
+                    <h3 class="mb-4 text-center">Role Creation</h3>
+                    <div class="app-brand justify-content-center">
+                        <a href="javascript:void(0)" class="app-brand-link gap-2 mb-3">
+                            <img src="{% static 'img/logo-img.png' %}" style="width:125px;height:36px" />
+                        </a>
+                    </div>
+                </div>
+
+                <!-- <div class = "row">
+            <div class="col-md-12">
+                <h5 class="modal-title text-center" id="modalCenterTitle">Add User</h5>
+            </div>
+        </div> -->
+
+                <form id="addRoleForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                    <input type="hidden" id="roleId" name="roleId" value="0" />
+
+                    <div class="modal-body pt-0">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="rolename" class="form-label" style="margin-right: 10px;">Role</label>
+                                <input type="text" id="rolename" name="rolename" class="form-control" placeholder="e.g. Admin" required>
+                            </div>
+
+                           
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label" style="margin-right: 10px;">Role</label>
+                                <textarea id="description" name="description" class="form-control" placeholder="About Role"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary bold" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary submitBtn bold">Create</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} {% block extra_css %}
+
+<style>
+    .roleNameGroup {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+    }
+</style>
+
+{% endblock %}
+
+
+<!-- JS -->
+
+{% block extra_js %}
+
+
+<script>
+    $(document).ready(function() {
+        var RoleData = $("#RoleData").data("val");
+        console.log(RoleData);
+
+
+        $("#adduserBtn").click(function() {
+            $("#addUsersForm").trigger('reset')
+            $("#userId").val(0);
+            $(".statusRow").hide();
+            $("#status").val('0');
+            $(".submitBtn").text("Register");
+            $("#profile_image").attr("src", "../static/img/avatars/noprofile.png")
+            $("#user_image").attr('required', 'required');
+            $("#managed_by_row").show()
+        })
+
+        function roleTable(roleListObj) {
+            (function rec(d) {
+                $.each(d, function(k, v) {
+                    if (typeof v === 'object') return rec(v)
+                    if (isNaN(v) && typeof v === 'number') d[k] = '---';
+                })
+            })(roleListObj);
+
+            if ($.fn.dataTable.isDataTable("#roleListDT")) {
+                $("#roleListDT").DataTable().destroy();
+            }
+
+            var roleListDatatable = $("#roleListDT").DataTable({
+                "data": roleListObj,
+                responsive: true,
+                paging: true,
+                searching: true,
+                "autoWidth": true,
+                "jQueryUI": true,
+                "scrollY": false,
+                "scrollCollapse": true,
+                "order": [0, "desc"],
+                "pageLength": 10,
+                "bLengthChange": false,
+                "scrollX": false,
+                columns: [{
+                    "title": "Id",
+                    "data": "id"
+                }, {
+                    "title": "Name",
+                    "data": "username"
+                }, {
+                    "title": "Email",
+                    "data": "email",
+                }, ],
+                columnDefs: [{
+                    "targets": 0,
+                    "visible": false,
+                }, {
+                    "targets": 1,
+                    "render": function(data, type, row) {
+                        var nameHtml = '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">\
+                                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"\
+                                                    class="avatar avatar-xs pull-up me-2" title="' + data + '" data-bs-original-title="Lilian Fuller" style="width:45px;height:45px">\
+                                                    <img src="../media/' + row.user_image + '" alt="Avatar" class="rounded-circle">\
+                                                </li>\
+                                                <li>' + data + '</li>\
+                                            </ul>'
+
+                        return nameHtml
+                    }
+                }, {
+                    "targets": 3,
+                    "data": "role",
+                    "title": "Role",
+                    "render": function(data, type, row) {
+                        var roleHtml;
+                        var roleText;
+                        var Class;
+                        if (data == "employee") {
+                            roleText = "Employee"
+                            Class = "badge bg-label-secondary me-1"
+                        } else if (data == 'manager') {
+                            roleText = "Manager"
+                            Class = "badge bg-label-info me-1"
+                        } else if (data == 'admin') {
+                            roleText = "Administrator"
+                            Class = "badge bg-label-primary me-1"
+                        }
+
+                        var roleHtml = '<span class="' + Class + '"">' + roleText + '</span>';
+
+                        return roleHtml;
+                    }
+                }, {
+                    "targets": 4,
+                    "title": "Status",
+                    "data": "status",
+                    "render": function(data, type, row) {
+                        var statusHtml;
+                        if (data == 0) {
+                            statusHtml = '<span class="badge bg-label-success me-1" style="background-color:#0dc30d">Active</span>'
+                        } else {
+                            statusHtml = '<span class="badge bg-label-danger me-1" style="background-color:#f51717">Inactive</span>'
+                        }
+                        return statusHtml;
+                    }
+                }, {
+                    "targets": 5,
+                    "title": "Action",
+                    "data": null,
+                    "render": function(data, type, row) {
+                        var actionHtml = "<a href='javascript:void(0)' style='color:var(--bs-table-hover-color)' title='edit' data-bs-toggle='modal' data-bs-target='#modalCenter' data-json = '" + JSON.stringify(row) + "' class='editBtn'>\
+                                                <i class='menu-icon tf-icons bx bx-edit'></i></a>"
+
+
+
+                        return actionHtml
+                    }
+                }, {
+                    "targets": [0, 3, 4, 5],
+                    "searchable": false
+                }]
+            })
+        };
+
+
+        $("#userListDT").on("click", ".editBtn", function() {
+            $(".statusRow").show()
+
+            var thisUserData = $(this).data("json");
+            console.log(thisUserData);
+
+            $("#userId").val(thisUserData.id);
+            $("#username").val(thisUserData.username);
+            $("#email").val(thisUserData.email);
+            $("#phone").val(thisUserData.phone);
+            $("#password").val(thisUserData.password);
+            $("#role").val(thisUserData.role);
+            $("#status").val(thisUserData.status);
+
+            $("#profile_image").attr("src", "../media/" + thisUserData.user_image)
+
+            $("#user_image").val("")
+
+            $("#user_image").removeAttr('required');
+
+            if (thisUserData.role == "employee") {
+                $("#managed_by_row").show()
+            } else {
+                $("#managed_by_row").hide()
+            }
+
+            $(".submitBtn").text("Save Changes");
+        })
+
+
+        $("#addUsersForm").submit(function(e) {
+            // e.preventDefault()
+            var userStatus = $("#status").val();
+            console.log(userStatus);
+
+            if (userStatus == 1) {
+                e.preventDefault()
+                Swal.fire({
+                    icon: "warning",
+                    // title: '<span class="trashIcon"><i class="tf-icons bx bx-trash me-1"></i></span>',
+                    html: '<div class="row" style="margin-top:15px">\
+                                <div class="col-md-12">\
+                                        <div class= "titleSection text-center">\
+                                            <h4>Are You Sure to Inactive</h4>\
+                                        </div>\
+                                </div >\
+                            </div >\
+                            <div class="row" style="margin-top:15px">\
+                                <div class="col-md-12">\
+                                    <div class="confirmSection text-center">\
+                                        <p style="line-height:1.5;font-size:20px">Customer <span style="font-weight:bold">' + $("#username").val() + '</span> Cannot be Assigned anymore</p>\
+                                    </div>\
+                                </div>\
+                            </div>',
+                    showCloseButton: false,
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: "Cancel",
+                    cancelButtonColor: 'grey',
+                    confirmButtonText: "Confirm",
+                    confirmButtonColor: '#22CC62',
+                    focusConfirm: false,
+
+                }).then(function(result) {
+                    if (result.value == true) {
+                        $("#addUsersForm").unbind('submit').submit()
+                    } else if (result.dismiss == 'cancel') {
+                        e.preventDefault()
+                    }
+                })
+            } else {
+                return true
+            }
+        })
+
+    })
+</script>
+
+{% endblock %}
